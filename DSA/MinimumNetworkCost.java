@@ -1,9 +1,12 @@
 package DSA;
 
-import java.util.ArrayList;
-import java.util.List;
+//3a
 
-public class Minnetworkcost {
+import java.util.*;
+
+public class MinimumNetworkCost {
+
+    
     static class UnionFind {
         int[] parent;
         int[] rank;
@@ -19,7 +22,7 @@ public class Minnetworkcost {
 
         int find(int x) {
             if (parent[x] != x) {
-                parent[x] = find(parent[x]); // Path compression
+                parent[x] = find(parent[x]); 
             }
             return parent[x];
         }
@@ -28,9 +31,9 @@ public class Minnetworkcost {
             int rootX = find(x);
             int rootY = find(y);
             if (rootX == rootY)
-                return false; // Already connected
+                return false; 
 
-            // Union by rank
+           
             if (rank[rootX] > rank[rootY]) {
                 parent[rootY] = rootX;
             } else if (rank[rootX] < rank[rootY]) {
@@ -44,36 +47,36 @@ public class Minnetworkcost {
     }
 
     public static int minCostToConnectDevices(int n, int[] modules, int[][] connections) {
-        // Create a list to store all edges (connections and module installations)
+        
         List<int[]> edges = new ArrayList<>();
 
-        // Add module installation edges
+        
         for (int i = 0; i < n; i++) {
-            edges.add(new int[] { 0, i + 1, modules[i] }); // Virtual node 0 connects to device i+1
+            edges.add(new int[] { 0, i + 1, modules[i] }); 
         }
 
-        // Add connection edges
+       
         for (int[] connection : connections) {
             edges.add(new int[] { connection[0], connection[1], connection[2] });
         }
 
-        // Sort edges by cost
+        
         edges.sort((a, b) -> a[2] - b[2]);
 
-        // Initialize Union-Find
+       
         UnionFind uf = new UnionFind(n);
 
         int totalCost = 0;
         int edgesUsed = 0;
 
-        // Kruskal's algorithm
+        
         for (int[] edge : edges) {
             int u = edge[0], v = edge[1], cost = edge[2];
             if (uf.union(u, v)) {
                 totalCost += cost;
                 edgesUsed++;
                 if (edgesUsed == n)
-                    break; // All devices are connected
+                    break; 
             }
         }
 
@@ -81,30 +84,29 @@ public class Minnetworkcost {
     }
 
     public static void main(String[] args) {
-        // Test Case 1
+        
         int n1 = 3;
         int[] modules1 = { 1, 2, 2 };
         int[][] connections1 = { { 1, 2, 1 }, { 2, 3, 1 } };
         System.out.println("Test Case 1:");
         System.out.println("Input: n = 3, modules = [1, 2, 2], connections = [[1, 2, 1], [2, 3, 1]]");
-        System.out.println("Output: " + minCostToConnectDevices(n1, modules1, connections1)); // Expected: 3
+        System.out.println("Output: " + minCostToConnectDevices(n1, modules1, connections1)); 
 
-        // Test Case 2
+       
         int n2 = 4;
         int[] modules2 = { 3, 4, 2, 5 };
         int[][] connections2 = { { 1, 2, 2 }, { 2, 3, 3 }, { 3, 4, 1 }, { 1, 4, 4 } };
         System.out.println("\nTest Case 2:");
         System.out.println(
                 "Input: n = 4, modules = [3, 4, 2, 5], connections = [[1, 2, 2], [2, 3, 3], [3, 4, 1], [1, 4, 4]]");
-        System.out.println("Output: " + minCostToConnectDevices(n2, modules2, connections2)); // Expected: 8
+        System.out.println("Output: " + minCostToConnectDevices(n2, modules2, connections2));
 
-        // Test Case 3
         int n3 = 5;
         int[] modules3 = { 1, 1, 1, 1, 1 };
         int[][] connections3 = { { 1, 2, 1 }, { 2, 3, 1 }, { 3, 4, 1 }, { 4, 5, 1 } };
         System.out.println("\nTest Case 3:");
         System.out.println(
                 "Input: n = 5, modules = [1, 1, 1, 1, 1], connections = [[1, 2, 1], [2, 3, 1], [3, 4, 1], [4, 5, 1]]");
-        System.out.println("Output: " + minCostToConnectDevices(n3, modules3, connections3)); // Expected: 5
+        System.out.println("Output: " + minCostToConnectDevices(n3, modules3, connections3)); 
     }
 }
